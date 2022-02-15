@@ -1,0 +1,30 @@
+#! /bin/bash
+#
+# Exercice 1 : scrap
+#
+# author : jclaude
+# date : 2022/02/15
+
+out_dir=$1
+base_url="https://www.w3.org/Style/CSS/Test/CSS3/Selectors/current/html/full/flat"
+next_url="css3-modsel-1.html"
+
+mkdir -p "$out_dir"
+
+i=1
+while [[ -n "$next_url" ]]; do
+    echo -en "\r\e[0K"
+    printf "Downloading (%03d/172) \"$next_url\"..." "$i"
+
+    next_url=`  curl -s "$base_url/$next_url" |\
+                tee "$out_dir/$next_url" |\
+                grep "rel=\"next\"" |\
+                cut -f4 -d '"'`
+    
+    # Don't want to wait that extra 2 seconds at the last url!
+    if [[ -n "$next_url" ]]; then
+        sleep 2
+    fi
+
+    let i+=1
+done
