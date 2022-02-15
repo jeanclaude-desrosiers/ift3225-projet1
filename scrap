@@ -11,10 +11,12 @@ next_url="css3-modsel-1.html"
 
 mkdir -p "$out_dir"
 
-i=1
+max=172
+i=0
 while [[ -n "$next_url" ]]; do
+    let i+=1
     echo -en "\r\e[0K"
-    printf "Downloading (%03d/172) \"$next_url\"..." "$i"
+    printf "Downloading (%03d/$max) \"$next_url\"..." "$i"
 
     next_url=`  curl -s "$base_url/$next_url" |\
                 tee "$out_dir/$next_url" |\
@@ -25,6 +27,7 @@ while [[ -n "$next_url" ]]; do
     if [[ -n "$next_url" ]]; then
         sleep 2
     fi
-
-    let i+=1
 done
+
+echo -en "\r\e[0K"
+printf "Downloaded (%03d/$max)\n" "$i"
