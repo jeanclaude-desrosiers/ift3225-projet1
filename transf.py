@@ -9,7 +9,7 @@ import bs4
 ##### Constants #####
 #####################
 
-OUT_DIR = "public"
+OUT_DIR = sys.argv[2]
 
 with open("./template/index.html") as FP:
     QUESTION_TEMPLATE_BS = BeautifulSoup(FP, features="html.parser")

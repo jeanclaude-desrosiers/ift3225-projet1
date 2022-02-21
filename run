@@ -1,0 +1,12 @@
+#! /bin/bash
+#
+#
+#
+# author : jclaude
+# date : 2022/02/20
+
+in_dir=$1
+out_dir=$2
+filenames=`find "$in_dir" | grep '.html$' | tr '\n' ';'`
+
+./transf "$filenames" "$out_dir"

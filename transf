@@ -5,7 +5,8 @@
 # author : jclaude
 # date : 2022/02/19
 
-filenames=`find temp | grep '.html$' | tr '\n' ';'`
+filenames=$1
+out_dir=$2
 
 readarray -d ";" -t filename_arr <<< "$filenames"
 
@@ -22,7 +23,9 @@ do
         sass --stdin 2> /dev/null > "$filename.display.css"
 done
 
-python transf.py "$filenames"
+python transf.py "$filenames" "$out_dir"
+
+cp /template/_index.css "$out_dir/css/_index.css"
 
 for filename in ${filename_arr[@]}
 do
