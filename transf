@@ -27,7 +27,7 @@ done
 echo "Running the python script to generate the HTML"
 python transf.py "$filenames" "$out_dir"
 
-cp /template/_index.css "$out_dir/css/_index.css"
+cp "./template/_index.css" "$out_dir/css/_index.css"
 
 echo "Cleaning the CSS files..."
 for filename in ${filename_arr[@]}
