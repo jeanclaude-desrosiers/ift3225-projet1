@@ -10,6 +10,7 @@ out_dir=$2
 
 readarray -d ";" -t filename_arr <<< "$filenames"
 
+echo "Producing the necessary CSS files..."
 for filename in ${filename_arr[@]}
 do
     style=`./get_style_content.sh "$filename"`
@@ -23,10 +24,12 @@ do
         sass --stdin 2> /dev/null > "$filename.display.css"
 done
 
+echo "Running the python script to generate the HTML"
 python transf.py "$filenames" "$out_dir"
 
 cp /template/_index.css "$out_dir/css/_index.css"
 
+echo "Cleaning the CSS files..."
 for filename in ${filename_arr[@]}
 do
     rm "$filename.css" "$filename.display.css"
