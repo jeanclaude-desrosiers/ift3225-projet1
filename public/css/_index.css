@@ -46,7 +46,10 @@ main {
 }
 
 main>pre, main>div {
+    overflow: scroll;
     border: 1px solid black;
+    max-height: 50%;
+    max-width: 30%;
     padding: 20px;
 }
 

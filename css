@@ -7,25 +7,18 @@
 
 out_dir=$1
 
-find "$out_dir" -name '*.html' |\
-    while read -r file; do
-        # need for grep
-        no_lines=$(wc -l "$file" | cut -f1 -d' ')
+ls "$out_dir" | grep '.html$' |\
+    while read -r html_file; do
 
-        cat "$file" |\
-            # take everything between the style tag
-            grep -A "$no_lines" "<style.*>" | grep -B "$no_lines" "</style>" |\
-            # put everything on the same line
-            sed -z 's/\n/ʕノ•ᴥ•ʔノ ︵ ┻━┻/g' |\
-            # get everything in between the first and last tag
-            cut -f2- -d ">" | rev | cut -f2- -d "<" | rev |\
-            # put the newlines back
-            sed -z 's/ʕノ•ᴥ•ʔノ ︵ ┻━┻/\n/g' > .temp.css
+        style=`./get_style_content.sh "$out_dir/$html_file"`
 
-        error_msg=`sass .temp.css | grep "Error: "`
-        if [[ -n "$error_msg" ]]; then
-            echo "$error_msg"
-        fi
+        echo "$style" |\
+            # only look at stderr
+            sass --stdin --no-unicode 2>&1 >/dev/null |\
+            # get only the lines which mention the error name
+            grep "Error:" |\
+        # iterate over error messages, because there might be > 1
+        while read -r err_msg; do
+            echo "$html_file, $err_msg"
+        done
     done
-
-rm .temp.css
