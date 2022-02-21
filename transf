@@ -25,11 +25,11 @@ do
         # only look at stdout
         sass --stdin 2> /dev/null > "$filename.display.css"
 done
+mkdir -p "$out_dir/css"
 
 echo "Running the python script to generate the HTML"
 python transf.py "$filenames" "$out_dir"
 
-mkdir -p "$out_dir/css"
 cp "./template/_index.css" "$out_dir/css/_index.css"
 
 echo "Cleaning the CSS files..."
